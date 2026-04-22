@@ -2,6 +2,10 @@ import logging
 import sys
 from pathlib import Path
 
+# Custom log level for success messages
+SUCCESS = 25
+logging.addLevelName(SUCCESS, "SUCCESS")
+
 class Colors:
     RESET = "\033[0m"
     RED = "\033[91m"
@@ -17,6 +21,7 @@ class ColoredFormatter(logging.Formatter):
         logging.WARNING: Colors.YELLOW,
         logging.ERROR: Colors.RED,
         logging.CRITICAL: Colors.RED,
+        25: Colors.GREEN,  # SUCCESS level
     }
 
     def format(self, record):
@@ -50,8 +55,7 @@ def info(msg: str, *args, **kwargs):
     logging.getLogger("root").info(msg, *args, **kwargs)
 
 def success(msg: str, *args, **kwargs):
-    _logger = logging.getLogger("root")
-    _logger.log(logging.INFO, f"{Colors.GREEN}{Colors.BOLD}SUCCESS{Colors.RESET} - {msg}", *args, **kwargs)
+    logging.getLogger("root").log(SUCCESS, msg, *args, **kwargs)
 
 def warning(msg: str, *args, **kwargs):
     logging.getLogger("root").warning(msg, *args, **kwargs)
